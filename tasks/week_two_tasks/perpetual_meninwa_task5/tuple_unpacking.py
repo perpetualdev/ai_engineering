@@ -9,10 +9,10 @@ user_details = (first_name, age, fav_color, home_town)
 
 # Unpack tuple
 name, user_age, favorite_color, hometown = user_details
-print(name)
-print(user_age)
-print(favorite_color)
-print(hometown)
+print("First Name: ", name)
+print("Age: ", user_age)
+print("Favorite Color: ", favorite_color)
+print("Home Town: ", hometown)
 
 # Use escape sequence to align each piece of information nicely
 print(f"Name\t\tAge\tFavourite Color\t\tHome Town\n=================================================================\n{name}\t{user_age}\t{favorite_color}\t\t\t{hometown}")

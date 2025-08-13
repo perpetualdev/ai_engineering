@@ -5,8 +5,8 @@ states = input("Enter five Nigerian states separated by comma e.g. Kano,Jos,etc:
 states_tuple = tuple(states.split(","))
 
 # Print the first state and last state
-print(states_tuple[0])
-print(states_tuple[-1])
+print("First State: ", states_tuple[0])
+print("Last State: ", states_tuple[-1])
 
 # Check if "Lagos" is in the tuple and print "Yes" or "No"
 if "Lagos" in states_tuple:
