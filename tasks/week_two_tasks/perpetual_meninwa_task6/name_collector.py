@@ -1,10 +1,7 @@
 # Collect the names of people attending a seminar
 seminar_attendance = set()
-seminar_attendance.add(input("What is your name?: "))
-seminar_attendance.add(input("What is your name?: "))
-seminar_attendance.add(input("What is your name?: "))
-seminar_attendance.add(input("What is your name?: "))
-seminar_attendance.add(input("What is your name?: "))
+for i in range(1, 6):
+  seminar_attendance.add(input(f"Enter the name of attendee {i}: "))
 
 # Display them in alphabetical order
 attendance_list = list(seminar_attendance)
