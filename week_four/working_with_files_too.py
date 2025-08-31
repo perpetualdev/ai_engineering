@@ -1,6 +1,6 @@
 from pathlib import Path
 
-workspace = Path("workspace_files")
+workspace = Path("week_four/workspace_files")
 workspace.mkdir(exist_ok=True)
 file_path = workspace / "notes.txt"
 
@@ -30,8 +30,30 @@ f.close()
 # Read from file
 # Read whole file
 f = open(file_path, "r", encoding="utf-8")
-content = f.readlines()
+content = f.read()
 f.close()
 print(content)
+"""
+  Shopping List:
+ - Rice
+ - Beans
+ - Garri
+ - Groundnut oil
+ - Maggi
+"""
 
-# Read
+# Read line-by-line
+f = open(file_path, "r", encoding="utf-8")
+print("First line:", f.readline().rstrip())
+print("Second line:", f.readline().rstrip())
+f.close()
+# First line: Shopping List:
+# Second line:  - Rice
+
+# Read as a list of lines
+f = open(file_path, "r", encoding="utf-8")
+lines = f.readlines()
+f.close()
+print("Lines list:", [line.rstrip() for line in lines])
+# Lines list: ['Shopping List:', ' - Rice', ' - Beans', ' - Garri', ' - Groundnut oil', ' - Maggi']
+
