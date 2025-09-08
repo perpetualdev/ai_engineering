@@ -228,4 +228,67 @@ with open(output_file, "r", encoding="utf-8") as f:
   print(f.read())
 
 # Output to expect
+"""
+Created input file
+File processing complete!
 
+Original file:
+hello world
+python programming
+file handling tutorial
+learning is fun
+
+Processed file:
+Line 1: HELLO WORLD
+Line 2: PYTHON PROGRAMMING
+Line 3: FILE HANDLING TUTORIAL
+Line 4: LEARNING IS FUN
+"""
+
+# _____________ MOVING AROUND IN A FILE ______________
+file_path = workspace / "story.txt"
+
+# Create a sample story file
+story = """Once upon a time, there was a lady  who was very curious and inquisitive, 
+she just want to know how things work behind the scene. 
+Eventually she had an opportunity to hopp into the world of programming for the first time.
+She started with python, now she codes in Python every day.
+One day, she discovered file handling.
+It opened up a whole new world of possibilities!
+The end."""
+
+with open(file_path, "w", encoding="utf-8") as f:
+  f.write(story)
+
+print("Created a story file!")
+
+# Exploring moving around in the file
+with open (file_path, "r", encoding="utf-8") as f:
+  print("\nFile positioning demo:")
+
+  # Read first 20 characters
+  first_part = f.read(20)
+  print(f"First 20 characters: '{first_part}")
+  # OUTPUT: First 20 characters: 'Once upon a time, th
+
+  # Check where we are now
+  current_position = f.tell()
+  print(f"Current position in file: {current_position}")
+  # OUTPUT: Current position in file: 20
+
+  # Jump to the beginning
+  f.seek(0)
+  print(f"After seeking to beginning: position {f.tell()}")
+  # OUTPUT: After seeking to beginning: position 0
+
+  # Jump to position 50 and read from there
+  f.seek(50)
+  rest_of_line = f.readline()
+  print(f"Reading from position 50: '{rest_of_line.strip()}")
+  # OUTPUT: Reading from position 50: 'urious and inquisitive,
+
+  # Go back to the beginning and read the first line
+  f.seek(0)
+  first_line = f.readline()
+  print(f"First line: '{first_line.strip()}'")
+  # OUTPUT: First line: 'Once upon a time, there was a lady  who was very curious and inquisitive,'
