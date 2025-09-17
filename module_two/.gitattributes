@@ -1,1 +1,1 @@
-C:/Users/ncc666/Desktop/ai_engineering/module_two/tasks/sales_data.xlsx filter=lfs diff=lfs merge=lfs -text
+tasks/sales_data.xls filter=lfs diff=lfs merge=lfs -text
