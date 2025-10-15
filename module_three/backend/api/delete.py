@@ -23,7 +23,6 @@ class BasicAPI(BaseHTTPRequestHandler):
     user_id = str(path_parts[-1])
     print(user_id)
 
-    # Check if email already exists
     user_ids = [item['id'] for item in output_data]
     print(user_ids)
     for item in output_data:

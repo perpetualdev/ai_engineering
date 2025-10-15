@@ -56,7 +56,7 @@ class BasicAPI(BaseHTTPRequestHandler):
     self.send_data({
       "Message": "User updated successfully",
       "data": post_data
-    }, status=200)
+    }, status=201)
 
 def run():
   server = HTTPServer(("localhost", 3000), BasicAPI)

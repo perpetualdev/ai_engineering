@@ -17,10 +17,12 @@ class BasicAPI(BaseHTTPRequestHandler):
         content_size = int(self.headers.get("Content-Length", 0))
         post_data = json.loads(self.rfile.read(content_size))
 
+        # If the file does not exist, create an empty list
         if not file_path.exists():
             with open(file_path, "w", encoding="utf-8") as f:
                 json.dump([], f)
 
+        # If the file exist, read the file and load it
         with open(file_path, "r", encoding="utf-8") as f:
             try:
                 output_data = json.load(f)
@@ -42,8 +44,9 @@ class BasicAPI(BaseHTTPRequestHandler):
         while new_id in existing_ids:
             new_id = random.randint(10, 99)
         post_data["id"] = new_id
-        
         output_data.append(post_data)
+
+        # add the new dictionary to the list
         with open(file_path, "w", encoding="utf-8") as f:
             json.dump(output_data, f, indent=4)
 
