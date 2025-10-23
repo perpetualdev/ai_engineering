@@ -1,0 +1,11 @@
+fastapi
+pydantic
+sqlalchemy
+dotenv
+bcrypt
+uvicorn
+pymysql
+seaborn
+matplotlib
+pandas
+numpy
