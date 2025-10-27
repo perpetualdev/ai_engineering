@@ -17,9 +17,9 @@ class Simple(BaseModel):
   password: str = Field(..., example="sam123")
   userType: str = Field(..., example="student")
 
-class LoginRequest(BaseModel):
-  email: str = Field(..., example="sam@gmail.com")
-  password: str = Field(..., example="sam123")
+# class LoginRequest(BaseModel):
+#   email: str = Field(..., example="sam@gmail.com")
+#   password: str = Field(..., example="sam123")
 
 @app.post("/signup")
 def signUp(input: Simple):
@@ -33,6 +33,7 @@ def signUp(input: Simple):
 
     if existing:
       print("Email already exist")
+      return
       # raise HTTPException(status_code=400, detail="Email already exist!")
 
     query = text("""
@@ -44,8 +45,6 @@ def signUp(input: Simple):
     salt = bcrypt.gensalt()
     hashed_password = bcrypt.hashpw(input.password.encode("utf-8"), salt)
     print(hashed_password)
-
-    # bcrypt.checkpw(input.password.encode('utf-8'), existing.password.encode('utf-8'))
 
     db.execute(query, {
       "name": input.name, 
@@ -64,20 +63,20 @@ def signUp(input: Simple):
       }
     }
   except Exception as e:
-    raise HTTPException(status_code=500, detail = e)
+    raise HTTPException(status_code=500, detail = str(e))
   
 
-@app.post('/login')
-def login(input: LoginRequest):
-  try:
-    query = text("""
-      SELECT * FROM users where email = :email
-    """)
+# @app.post('/login')
+# def login(input: LoginRequest):
+#   try:
+#     query = text("""
+#       SELECT * FROM users where email = :email
+#     """)
 
-    result = db.execute(query, 
-            {"email": input.email})
-  except Exception as e:
-    raise HTTPException(status_code=404, detail=str(e))
+#     result = db.execute(query, 
+#             {"email": input.email})
+#   except Exception as e:
+#     raise HTTPException(status_code=404, detail=str(e))
   
 if __name__ == "__main__":
   uvicorn.run(app, host=os.getenv("host"), port=int(os.getenv("port")))
