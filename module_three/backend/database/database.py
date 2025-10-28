@@ -10,7 +10,7 @@ load_dotenv()
 
 db_url=os.getenv("dburl")
 
-engine = create_engine(db_url, connect_args={"client_flag": CLIENT.MULTI_STATEMENTS})
+engine = create_engine(db_url, connect_args={"client_flag": CLIENT.MULTI_STATEMENTS}) # pyright: ignore[reportArgumentType]
 
 session = sessionmaker(bind=engine)
 
