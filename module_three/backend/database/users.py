@@ -29,12 +29,12 @@ def signUp(input: Simple):
       WHERE email = :email
     """)
 
-    existing = db.execute(duplicate_query, {"email": input.email})
+    existing = db.execute(duplicate_query, {"email": input.email}).fetchone()
 
     if existing:
-      print("Email already exist")
-      return
-      # raise HTTPException(status_code=400, detail="Email already exist!")
+      # print("Email already exist")
+      # return
+      raise HTTPException(status_code=400, detail="Email already exist!")
 
     query = text("""
       INSERT INTO users (name, email, password, userType)
