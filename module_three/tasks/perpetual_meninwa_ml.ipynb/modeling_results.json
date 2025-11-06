@@ -1,0 +1,55 @@
+{
+  "best_model": "Random Forest",
+  "best_model_score": 0.6981065918653576,
+  "test_accuracy": 0.8048780487804879,
+  "test_balanced_acc": 0.7642414860681115,
+  "test_f1": 0.7680703959773727,
+  "confusion_matrix": [
+    [
+      25,
+      13
+    ],
+    [
+      11,
+      74
+    ]
+  ],
+  "feature_importance": [
+    {
+      "feature": "Credit_History",
+      "importance": 0.20916947715878925
+    },
+    {
+      "feature": "Loan_Income_Ratio",
+      "importance": 0.14270262838013129
+    },
+    {
+      "feature": "ApplicantIncome_log",
+      "importance": 0.14122021095024753
+    },
+    {
+      "feature": "Total_Income",
+      "importance": 0.12371426610324084
+    },
+    {
+      "feature": "Income_Term_Ratio",
+      "importance": 0.11874852407999474
+    },
+    {
+      "feature": "Loan_Term_Ratio",
+      "importance": 0.09375322019593577
+    },
+    {
+      "feature": "LoanAmount_log",
+      "importance": 0.08564345178951528
+    },
+    {
+      "feature": "CoapplicantIncome_log",
+      "importance": 0.069559200579942
+    },
+    {
+      "feature": "Loan_Amount_Term",
+      "importance": 0.015489020762203447
+    }
+  ]
+}

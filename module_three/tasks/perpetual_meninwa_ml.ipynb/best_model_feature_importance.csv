@@ -1,0 +1,10 @@
+feature,importance
+Credit_History,0.20916947715878925
+Loan_Income_Ratio,0.14270262838013129
+ApplicantIncome_log,0.14122021095024753
+Total_Income,0.12371426610324084
+Income_Term_Ratio,0.11874852407999474
+Loan_Term_Ratio,0.09375322019593577
+LoanAmount_log,0.08564345178951528
+CoapplicantIncome_log,0.069559200579942
+Loan_Amount_Term,0.015489020762203447
