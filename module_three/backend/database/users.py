@@ -25,7 +25,7 @@ class LoginRequest(BaseModel):
   password: str = Field(..., example="sam123") # type: ignore
 
 class courseRequest(BaseModel):
-  title: str = Field(..., example="Backend Course")
+  title: str = Field(..., example="Backend Course") # type: ignore
   level: str = Field(..., example="Engineer")
 
 @app.post("/signup")
