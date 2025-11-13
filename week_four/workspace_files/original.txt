@@ -1,4 +1,0 @@
-hello world
-python programming
-file handling tutorial
-learning is fun

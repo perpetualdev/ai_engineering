@@ -1,8 +1,0 @@
-All Tasks: 
- -> Buy beans
- -> Eat Garri
-Completed Tasks
- -> Get sugar
-Not Completed Tasks
--> Buy beans
--> Eat Garri
