@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Interface</title>
+    <style>
+      body {
+        font-family: "Roboto", Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f4f9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      .container {
+        width: 90%;
+        max-width: 800px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 600px;
+      }
+      .header {
+        padding: 20px;
+        background-color: #3c1ae8;
+        color: white;
+        font-size: 1.5em;
+        font-weight: bold;
+        text-align: center;
+      }
+      .tabs {
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0;
+        background-color: #e8f0fe;
+        border-bottom: 1px solid #ddd;
+      }
+      .tab-button {
+        background: none;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        font-size: 0.9em;
+        color: #5f6368;
+        transition: color 0.2s, background-color 0.2s;
+        border-radius: 8px;
+        text-transform: capitalize;
+        font-family: "Roboto", Arial, sans-serif; /* Ensure button uses Roboto */
+      }
+      .tab-button.selected {
+        background-color: #c5e0ff;
+        color: #1a73e8;
+        font-weight: bold;
+      }
+      .tab-button:hover:not(.selected) {
+        background-color: #f0f4f9;
+      }
+      .chat-area {
+        flex-grow: 1;
+        padding: 20px;
+        overflow-y: auto;
+        background-color: #f7f9fb;
+      }
+      .response-container {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        padding: 15px;
+        background-color: #b3c4ec;
+        border-radius: 8px;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+      .input-form {
+        padding: 20px;
+        border-top: 1px solid #ddd;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .input-group {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      #prompt,
+      #persona,
+      #doc_url {
+        flex-grow: 1;
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 25px;
+        font-size: 1em;
+        resize: none;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        font-family: "Roboto", Arial, sans-serif; /* Ensure inputs use Roboto */
+      }
+      #send-button {
+        background-color: #1a73e8;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 1em;
+        transition: background-color 0.2s;
+        font-family: "Roboto", Arial, sans-serif; /* Ensure button uses Roboto */
+      }
+      #send-button:hover {
+        background-color: #0c60c3;
+      }
+      .hidden {
+        display: none;
+      }
+      .thinking {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">Chat With Me</div>
+
+      <div class="tabs" id="tabs-container"></div>
+
+      <div class="chat-area">
+        <h3>Selected Mode: <span id="selected-mode">Text</span></h3>
+        <p id="placeholder-text">
+          Enter your prompt below to start a conversation.
+        </p>
+        <div class="response-container hidden" id="response-output"></div>
+      </div>
+
+      <form class="input-form" id="chat-form">
+        <input
+          type="text"
+          id="persona"
+          placeholder="Enter Persona/System Instruction (Optional)"
+          class="hidden"
+        />
+        <input
+          type="text"
+          id="doc_url"
+          placeholder="Enter Document URL (for 'docs' mode)"
+          class="hidden"
+        />
+        <div class="input-group">
+          <textarea
+            id="prompt"
+            placeholder="Message Gemini..."
+            rows="2"
+            required
+          ></textarea>
+          <button type="submit" id="send-button">Send</button>
+        </div>
+      </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+      const API_URL = "http://127.0.0.1:8000/chat";
+      const TABS = [
+        "text",
+        // "image",
+        "video",
+        "code",
+        "persona",
+        "audio",
+        "docs",
+      ];
+
+      let currentSelection = "text";
+
+      const tabsContainer = document.getElementById("tabs-container");
+      const selectedModeSpan = document.getElementById("selected-mode");
+      const chatForm = document.getElementById("chat-form");
+      const promptInput = document.getElementById("prompt");
+      const personaInput = document.getElementById("persona");
+      const docUrlInput = document.getElementById("doc_url");
+      const responseOutput = document.getElementById("response-output");
+      const placeholderText = document.getElementById("placeholder-text");
+
+      TABS.forEach((selection) => {
+        const button = document.createElement("button");
+        button.className = "tab-button";
+        button.textContent = selection;
+        button.dataset.selection = selection;
+        button.addEventListener("click", () => switchTab(selection));
+        tabsContainer.appendChild(button);
+      });
+
+      switchTab(currentSelection);
+
+      function switchTab(newSelection) {
+        currentSelection = newSelection;
+
+        document.querySelectorAll(".tab-button").forEach((btn) => {
+          btn.classList.remove("selected");
+          if (btn.dataset.selection === newSelection) {
+            btn.classList.add("selected");
+          }
+        });
+
+        selectedModeSpan.textContent =
+          newSelection.charAt(0).toUpperCase() + newSelection.slice(1);
+
+        const isPersona = newSelection === "persona";
+        const isDocs = newSelection === "docs";
+
+        personaInput.classList.toggle("hidden", !isPersona);
+        docUrlInput.classList.toggle("hidden", !isDocs);
+
+        promptInput.value = "";
+        personaInput.value = "";
+        docUrlInput.value = "";
+        responseOutput.classList.add("hidden");
+        placeholderText.style.display = "block";
+        responseOutput.textContent = "";
+      }
+
+      chatForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        await sendMessage();
+      });
+
+      async function sendMessage() {
+        const prompt = promptInput.value.trim();
+        if (!prompt) return;
+
+        // Hide placeholder, show response area, and set loading state
+        placeholderText.style.display = "none";
+        responseOutput.classList.remove("hidden");
+        responseOutput.textContent = `Thinking in '${currentSelection}' mode...`;
+
+        const data = {
+          prompt: prompt,
+          selection: currentSelection,
+          persona: personaInput.value || null,
+          video_url: null,
+          doc_url: docUrlInput.value || null,
+          audio_url: null,
+        };
+
+        try {
+          const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.text();
+            throw new Error(
+              errorData.detail || `HTTP error! Status: ${response.status}`
+            );
+          }
+
+          const result = await response.json();
+
+          let finalResponseText = "No response text received.";
+
+          if (currentSelection === "image") {
+            finalResponseText =
+              "Image generation request sent. Check your backend server for 'generated_image.png'.";
+          } else if (result.response) {
+            finalResponseText = result.response;
+          } else if (typeof result === "string") {
+            finalResponseText = result;
+          }
+
+          const htmlResponse = marked.parse(finalResponseText);
+
+          responseOutput.innerHTML = htmlResponse;
+        } catch (error) {
+          console.error("Error:", error);
+          responseOutput.textContent = `Error: ${error.message}. Please check your backend server and console.`;
+        } finally {
+          promptInput.value = "";
+        }
+      }
+    </script>
+  </body>
+</html>
